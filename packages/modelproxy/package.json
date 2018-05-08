@@ -1,14 +1,12 @@
 {
   "name": "modelproxy",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "接口配置建模框架",
   "main": "out/index.js",
   "scripts": {
     "test": "mocha test/**/*.js",
     "test-list": "mocha --reporter list test/**/*.js",
-    "demo": "node out/demo",
-    "publish-please": "publish-please",
-    "prepublish": "publish-please guard"
+    "demo": "node out/demo"
   },
   "repository": {
     "type": "git",

@@ -1,12 +1,10 @@
 {
   "name": "modelproxy-engine-fetch",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "modelproxy中fetch的engine",
   "main": "out/fetch.engine.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
-    "publish-please": "publish-please",
-    "prepublish": "publish-please guard"
+    "test": "echo \"Error: no test specified\""
   },
   "typings": "./out/fetch.engine.d.ts",
   "types": "./out/fetch.engine.d.ts",
@@ -15,7 +13,7 @@
   "devDependencies": {
     "@types/isomorphic-fetch": "0.0.34",
     "isomorphic-fetch": "^2.2.1",
-    "modelproxy": "^1.0.12",
+    "modelproxy": "^1.0.13",
     "publish-please": "^2.3.1"
   }
 }
