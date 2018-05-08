@@ -1,6 +1,6 @@
 {
   "name": "modelproxy-engine-fetch",
-  "version": "1.0.6",
+  "version": "1.0.12",
   "description": "modelproxy中fetch的engine",
   "main": "out/fetch.engine.js",
   "scripts": {
@@ -12,11 +12,10 @@
   "types": "./out/fetch.engine.d.ts",
   "author": "Nick",
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
     "@types/isomorphic-fetch": "0.0.34",
     "isomorphic-fetch": "^2.2.1",
-    "modelproxy": "^1.0.11",
+    "modelproxy": "^1.0.12",
     "publish-please": "^2.3.1"
   }
 }
