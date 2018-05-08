@@ -1,0 +1,22 @@
+{
+  "name": "modelproxy",
+  "version": "1.0.0",
+  "description": "modelproxy相关项目归并",
+  "main": "index.js",
+  "scripts": {
+    "test": "exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick121212/modelproxy.git"
+  },
+  "keywords": [
+    "modelproxy",
+    "interface"
+  ],
+  "author": "NICK",
+  "license": "MIT",
+  "dependencies": {
+    "lerna": "^2.4.0"
+  }
+}
