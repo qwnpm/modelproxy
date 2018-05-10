@@ -13,14 +13,21 @@ const promiseFactory = new BaseFactory<Promise<any>>();
  * @returns {Promise<any>}
  */
 export const fetchCacheDec = (fetchPromise: () => Promise<any>, options: IExecute, fullPath: string) => {
-    const { cache = false } = options.settings || {},
+    let { cache = false } = options.settings || {},
         { method = "" } = options.instance || {},
         proKey = fullPath + method;
 
+    // 只有get才能缓存
+    if (method.toString().toUpperCase() !== "GET") {
+        cache = false;
+    }
+
+    // 如果不缓存直接调用方法
     if (!cache) {
         return fetchPromise();
     }
 
+    // 从缓存中提取文档，如果没有，则添加
     const promiseInCache = promiseFactory.get(proKey);
 
     if (promiseInCache) {
