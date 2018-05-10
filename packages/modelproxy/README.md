@@ -178,12 +178,12 @@ export class WxAppEngine extends BaseEngine {
 
 ```typescript
     proxy.race([
-        login: login.get.bind(login, null, {
+        login.get.bind(login, null, {
             params: {
                 tag: "nora"
             }
         }),
-        article: article.delete.bind(article, 1)
+        article.delete.bind(article, 1)
     ]).then(console.log);
 ```
 
