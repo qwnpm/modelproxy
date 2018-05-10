@@ -1,6 +1,7 @@
 import { ModelProxy, BaseEngine } from "modelproxy";
 import { IProxyCtx } from "modelproxy/out/models/proxyctx";
 import { IInterfaceModel } from "modelproxy/out/models/interface";
+import { IExecute } from "modelproxy/out/models/execute";
 import * as fetch from "isomorphic-fetch";
 
 import { fetchCacheDec } from "./fetch.cache";
@@ -67,19 +68,15 @@ export class FetchEngine extends BaseEngine {
 
     /**
      * 调用接口代理方法
-     * @param instance 接口的信息
-     * @param options  调用接口的参数
+     * @param   {IInterfaceModel} instance 接口的信息
+     * @param   {IExecute}        options  调用接口的参数
+     * @returns {Promise<any>}             返回数据
      */
-    public async proxy(instance: IInterfaceModel, options: any): Promise<any> {
-        const fn = this.callback(() => {
-            // console.log();
-        });
-        const ctx: IProxyCtx = {
+    public async proxy(instance: IInterfaceModel, options: IExecute): Promise<any> {
+        const ctx: IProxyCtx = await this.callback()({
             executeInfo: options,
             instance: instance,
-        };
-
-        await fn(ctx);
+        });
 
         if (ctx.isError) {
             throw ctx.err;
