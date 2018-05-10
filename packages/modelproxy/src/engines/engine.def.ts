@@ -13,7 +13,7 @@ export class DefaultEngine extends BaseEngine {
         super();
 
         this.use(async (ctx: IProxyCtx, next: Function) => {
-            console.log((ctx.instance as any).title, (ctx.instance as any).method, this.getFullPath(ctx.instance as any, ctx.executeInfo as any));
+            // console.log((ctx.instance as any).title, (ctx.instance as any).method, this.getFullPath(ctx.instance as any, ctx.executeInfo as any));
 
             await next("");
         });
@@ -21,15 +21,15 @@ export class DefaultEngine extends BaseEngine {
 
     /**
      * 调用接口，这里触发一次中间件方法
-     * @param instance 接口的实例
-     * @param options  接口的调用参数
+     * @param   {IInterfaceModel}  instance 接口的实例
+     * @param   {IExecute}         options  接口的调用参数
      * @returns {Promise<any>}
      */
     public async proxy(instance: IInterfaceModel, options: IExecute): Promise<any> {
         const res: IProxyCtx = await this.callback()({
-                executeInfo: options,
-                instance: instance
-            });
+            executeInfo: options,
+            instance: instance
+        });
 
         if (res.isError) {
             throw res.err;

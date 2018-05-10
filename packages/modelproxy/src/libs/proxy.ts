@@ -20,7 +20,7 @@ export class ModelProxy extends Compose<any> {
 
     /**
      * 添加engines
-     * @param engines { { [id: string]: IEngine; } }  引擎对象
+     * @param   { { [id: string]: IEngine; } } engines   引擎对象
      * @returns {ModelProxy}
      */
     public addEngines(engines: { [id: string]: IEngine; }): ModelProxy {
@@ -35,8 +35,9 @@ export class ModelProxy extends Compose<any> {
     }
     /**
      * 导入配置
-     * @param config {IProxyConfig} 配置信息
-     * @return    {ModelProxy}    当前实例
+     * @param  {IProxyConfig}            config                    配置信息
+     * @param  {overrideInterfaceConfig} overrideInterfaceConfig   覆盖的参数
+     * @return {ModelProxy}                                        当前实例
     */
     public loadConfig(config: IProxyConfig, overrideInterfaceConfig: IInterfaceModelCommon): ModelProxy {
         this.interfaces[config.key as string] = this.initInterfaces(config, overrideInterfaceConfig);
@@ -46,9 +47,10 @@ export class ModelProxy extends Compose<any> {
 
     /**
      * 执行一个接口方法
-     * @param path     {String}   执行的方法路径;格式：/${ns}/${key}；example: /localhost/login
-     * @param options  {IExecute} 调用接口所需的data
-     * @return {Promise<any>}
+     * @param   {String}    ns       接口的命名空间
+     * @param   {String}    key      接口的key
+     * @param   {IExecute}  options  调用接口所需的参数
+     * @returns {Promise<any>}
      */
     public async execute(ns: string, key: string, options: IExecute = {}) {
         let interfaces = this.getNs(ns);
@@ -63,7 +65,7 @@ export class ModelProxy extends Compose<any> {
 
     /**
      * 执行多个接口请求
-     * @param {{ [key: string]: () => Promise<any> }} inters 接口以key:value的形式
+     * @param   {{ [key: string]: () => Promise<any> }} inters 接口以key:value的形式
      * @returns {Promise<any>}
      * @example 
      *  proxy.executeAll({
@@ -113,7 +115,7 @@ export class ModelProxy extends Compose<any> {
 
     /**
      * 获取namespace
-     * @param ns    {string} 空间名
+     * @param  {string}             ns     空间名
      * @return { InterfaceFactory }
      */
     public getNs(ns: string): InterfaceFactory {
@@ -135,8 +137,8 @@ export class ModelProxy extends Compose<any> {
 
     /**
      * 初始化配置文件中的接口信息
-     * @param config {IProxyConfig} 配置信息
-     * @return {InterfaceFactory}
+     * @param   {IProxyConfig}      config  配置信息
+     * @returns {InterfaceFactory}
      */
     private initInterfaces(config: IProxyConfig, overrideInterfaceConfig: IInterfaceModelCommon = {}): InterfaceFactory {
         let ifFactory = new InterfaceFactory();

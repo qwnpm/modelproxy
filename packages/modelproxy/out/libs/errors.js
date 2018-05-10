@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class BaseError {
     constructor(message) {
+        this.name = "";
         this.message = message ? message : "";
         this.stack = (new Error()).stack;
     }

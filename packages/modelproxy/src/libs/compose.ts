@@ -1,11 +1,19 @@
-import { IProxyCtx } from "../models/proxyctx";
+import { IProxyCtx } from '../models/proxyctx';
 // import * as Bluebird from "bluebird";
+
+export interface MiddleFunc {
+    (ctx: IProxyCtx, next: (symbol?: string) => void): void;
+}
+
+export interface MiddleRtnFunc {
+    (ctx?: IProxyCtx): void;
+}
 
 /**
  * koa中间件方法
  */
 export class Compose<T extends IProxyCtx>  {
-    private middlewares: Array<Function>;
+    private middlewares: Array<MiddleFunc>;
 
     constructor() {
         this.middlewares = [];
@@ -13,10 +21,10 @@ export class Compose<T extends IProxyCtx>  {
 
     /**
      * 添加中间件函数
-     * @param func    {Function} 中间件方法
-     * @return        {void}
+     * @param  { MiddleFunc} func 中间件方法
+     * @return {void}
      */
-    public use(func: Function): void {
+    public use(func: MiddleFunc): void {
         if (typeof func !== "function") {
             throw new TypeError("middleware must be a function！");
         }
@@ -45,13 +53,12 @@ export class Compose<T extends IProxyCtx>  {
             }
         }
 
-        return (context: T, next: Function): Promise<any> => {
+        return (context: T, next: MiddleFunc): Promise<any> => {
             return new Promise((resolve, reject) => {
                 let index = -1;
-
                 const dispatch = (i: number) => {
                     return new Promise(async (resolve1) => {
-                        let fn = this.middlewares[i];
+                        let fn: MiddleFunc = this.middlewares[i];
 
                         if (i <= index) {
                             return reject(new Error("next() called multiple times" + i + "-" + index));
@@ -85,8 +92,8 @@ export class Compose<T extends IProxyCtx>  {
 
     /**
      * 错误的判断
-     * @param ctx   {Object} 执行上下文
-     * @param err   {Object} 错误数据
+     * @param {Object}  ctx    执行上下文
+     * @param {Object}  err    错误数据
      */
     public errorHandle(ctx: T, err: Error) {
         ctx.isError = true;
@@ -96,20 +103,20 @@ export class Compose<T extends IProxyCtx>  {
 
     /**
      * 包装compose函数
-     * @param complete {Function} 执行完毕后回调函数
-     * @return  {Function}
+     * @param   {MiddleRtnFunc} complete  执行完毕后回调函数
+     * @returns {MiddleRtnFunc}
      */
-    public callback(complete?: Function): Function {
+    public callback(complete?: MiddleRtnFunc): (options: any) => Promise<IProxyCtx> {
         const fn = this.compose();
 
         return (options: any): Promise<any> => {
             let ctx: T = Object.assign(options || {}, {}) as T;
-            let promise = fn(ctx, async (content: any, next: Function) => {
+            let promise = fn(ctx, async (content: any, next: MiddleRtnFunc) => {
                 await next();
             }).then(() => {
-                if (complete) {
-                    complete(ctx);
-                }
+                // if (complete) {
+                //     complete(ctx);
+                // }
 
                 return ctx;
             }).catch((err: Error) => {

@@ -1,7 +1,7 @@
 // import * as tv4 from "tv4";
 
 export class BaseError implements Error {
-    public name: string;
+    public name: string = "";
     public message: string;
     public stack: string | undefined;
 

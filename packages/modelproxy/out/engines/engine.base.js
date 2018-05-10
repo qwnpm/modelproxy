@@ -34,8 +34,7 @@ class BaseEngine extends compose_1.Compose {
         return "";
     }
     replacePath(instance, { params = [], data = {} }) {
-        let tokens = pathToRegexp.parse(instance.path);
-        let paths = [];
+        const tokens = pathToRegexp.parse(instance.path), paths = [];
         tokens.forEach((token) => {
             let { name } = token;
             if (!name) {
@@ -52,17 +51,17 @@ class BaseEngine extends compose_1.Compose {
         return paths.join("");
     }
     getFullPath(instance, options) {
-        let url = `${this.getStatePath(instance)}` + this.replacePath(instance, options);
-        let searchParams = new URLSearchParams();
+        const url = [this.getStatePath(instance), this.replacePath(instance, options)], searchParams = new URLSearchParams();
         if (options.params) {
             Object.keys(options.params).forEach((key) => {
                 searchParams.append(key, options.params[key]);
             });
-            if (searchParams.toString()) {
-                url += `?${searchParams.toString()}`;
+            let qs = searchParams.toString();
+            if (qs) {
+                url.push(`?${qs}`);
             }
         }
-        return url;
+        return url.join("");
     }
 }
 exports.BaseEngine = BaseEngine;

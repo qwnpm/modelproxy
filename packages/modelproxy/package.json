@@ -5,8 +5,7 @@
   "main": "out/index.js",
   "scripts": {
     "test": "mocha test/**/*.js",
-    "test-list": "mocha --reporter list test/**/*.js",
-    "demo": "node out/demo"
+    "build": "tsc -d"
   },
   "repository": {
     "type": "git",

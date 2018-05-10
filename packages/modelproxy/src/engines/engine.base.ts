@@ -9,16 +9,16 @@ import { IProxyCtx } from "../models/proxyctx";
 import { IInterfaceModel } from "../models/interface";
 import { ModelProxyMissingError } from "../libs/errors";
 
-export  class BaseEngine extends Compose<IProxyCtx> implements IEngine {
+export class BaseEngine extends Compose<IProxyCtx> implements IEngine {
     constructor() {
         super();
     }
 
     /**
      * 验证数据的准确性
-     * @param instance   {IInterfaceModel}  接口模型
-     * @param options    {IExecute}         参数
-     * @return           {boolean}
+     * @param   {IInterfaceModel}  instance     接口模型
+     * @param   {IExecute}         options      参数
+     * @returns {Promise<boolean>}              返回数据是否合法
      */
     public async validate(instance: IInterfaceModel, options: IExecute): Promise<boolean> {
         // instance.dataSchema && this.validateTv4(options.data || {}, instance.dataSchema);
@@ -29,9 +29,9 @@ export  class BaseEngine extends Compose<IProxyCtx> implements IEngine {
 
     /**
      * 代理接口
-     * @param instance   {IInterfaceModel}  接口模型
-     * @param options    {IExecute}         参数
-     * @return           {Promise<any>}
+     * @param   {IInterfaceModel}  instance     接口模型
+     * @param   {IExecute}         options      参数
+     * @return  {Promise<any>}                  接口的返回值
      */
     public async proxy(instance: IInterfaceModel, options: IExecute): Promise<any> {
         instance.getPath(options.instance);
@@ -41,8 +41,8 @@ export  class BaseEngine extends Compose<IProxyCtx> implements IEngine {
 
     /**
      * 取得state所对应的环境
-     * @param instance  {IInterfaceModel}   接口实例
-     * @return          {String}
+     * @param   {IInterfaceModel}  instance     接口实例
+     * @return  {String}                        返回当前的域名
      */
     public getStatePath(instance: IInterfaceModel): string {
         if (instance.states && instance.state) {
@@ -54,13 +54,16 @@ export  class BaseEngine extends Compose<IProxyCtx> implements IEngine {
 
     /**
      * 替换path中的变量
-     * @param instance   {IInterfaceModel}  接口模型
-     * @param options    {IExecute}         参数
+     * @param   {IInterfaceModel} instance     接口模型
+     * @param   {IExecute}        options      参数
+     * @returns {string}                       返回替换过后的路径
      */
     public replacePath(instance: IInterfaceModel, { params = [], data = {} }: IExecute): string {
-        let tokens: Array<pathToRegexp.Key | string> = pathToRegexp.parse((instance.path as string));
-        let paths: Array<string> = [];
+        const tokens: Array<pathToRegexp.Key | string> = pathToRegexp.parse((instance.path as string)),
+            paths: Array<string> = [];
 
+        // 处理path中的变量
+        // 遍历所有的tokens
         tokens.forEach((token: pathToRegexp.Key | string) => {
             let { name } = (token as pathToRegexp.Key);
 
@@ -80,23 +83,26 @@ export  class BaseEngine extends Compose<IProxyCtx> implements IEngine {
 
     /**
      * 获取接口的全路径
-     * @param instance   {IInterfaceModel}  接口模型
-     * @param options    {IExecute}         参数
+     * @param   {IInterfaceModel}  instance     接口模型
+     * @param   {IExecute}         options      参数
+     * @returns {string}                        返回路径
      */
     public getFullPath(instance: IInterfaceModel, options: IExecute): string {
-        let url = `${this.getStatePath(instance)}` + this.replacePath(instance, options);
-        let searchParams: URLSearchParams = new URLSearchParams();
+        const url = [this.getStatePath(instance), this.replacePath(instance, options)],
+            searchParams: URLSearchParams = new URLSearchParams();
 
         if (options.params) {
             Object.keys(options.params).forEach((key) => {
                 searchParams.append(key, options.params[key]);
             });
 
-            if (searchParams.toString()) {
-                url += `?${searchParams.toString()}`;
+            let qs = searchParams.toString();
+
+            if (qs) {
+                url.push(`?${qs}`);
             }
         }
 
-        return url;
+        return url.join("");
     }
 }
