@@ -31,10 +31,15 @@
   - [put](#put)
   - [getPath](#getPath)
 - [Compose](#Compose)
+  - [use](#use)
+  - [clear](#clear)
+  - [compose](#compose)
+  - [callback](#callback)
+  - [errorHandle](#errorHandle)
 
 ## 4. ModelProxy
 
-- ### constructor
+### constructor
 
  构造函数
 
@@ -42,7 +47,7 @@
     var proxy = new ModelProxy();
 ```
 
-- ### loadConfig
+### loadConfig
 
 载入接口配置信息，载入后即可调用接口，返回ModelProxy对象；
 
@@ -76,7 +81,7 @@ proxy.loadConfig({
 });
 ```
 
-- ### addEngines
+### addEngines
 
 加入engines，默认只有default一个engine。
 
@@ -144,7 +149,7 @@ export class WxAppEngine extends BaseEngine {
 }
 ```
 
-- ### execute
+### execute
 
 调用一个接口。返回一个promise对象；
 
@@ -157,7 +162,7 @@ export class WxAppEngine extends BaseEngine {
     });
 ```
 
-- ### executeAll
+### executeAll
 
 调用多个接口。返回一个promise对象；
 
@@ -172,7 +177,7 @@ export class WxAppEngine extends BaseEngine {
     }).then(console.log);
 ```
 
-- ### race
+### race
 
 调用多个接口，返回第一个返回的接口的数据，返回Promise;
 
@@ -187,7 +192,7 @@ export class WxAppEngine extends BaseEngine {
     ]).then(console.log);
 ```
 
-- ### getNs
+### getNs
 
 获取一个命名空间，空间中存放的是接口。不同命名空间中使用不同的域名，所以同域名的接口可以配置在同一个配置文件中。返回一个InterfaceFactory对象。
 
@@ -197,7 +202,7 @@ export class WxAppEngine extends BaseEngine {
 
 ## 5. InterfaceFactory
 
-- ### get
+### get
 
 通过get调用接口。这里会覆盖配置文件中配置的method属性。
 
@@ -210,7 +215,7 @@ export class WxAppEngine extends BaseEngine {
     // 发送请求 GET http://www.baidu.com/articles/1
 ```
 
-- ### post
+### post
 
 通过post调用接口。这里会覆盖配置文件中配置的method属性。
 
@@ -221,7 +226,7 @@ export class WxAppEngine extends BaseEngine {
     // 发送请求 POST http://www.baidu.com/articles
 ```
 
-- ### delete
+### delete
 
 通过delete调用接口。这里会覆盖配置文件中配置的method属性。
 
@@ -230,7 +235,7 @@ export class WxAppEngine extends BaseEngine {
     // 发送请求 DELETE http://www.baidu.com/articles/1
 ```
 
-- ### put
+### put
 
 通过put调用接口。这里会覆盖配置文件中配置的method属性。
 
@@ -241,7 +246,7 @@ export class WxAppEngine extends BaseEngine {
     // 发送请求 PUT http://www.baidu.com/articles/1
 ```
 
-- ### getPath
+### getPath
 
 这个方法用于获取接口的路径，比如socket链接的地址等；
 
@@ -254,11 +259,11 @@ export class WxAppEngine extends BaseEngine {
 
 继承自[Compose](#compose)类；提供接口的具体调用中间件。
 
-- ### proxy
+### proxy
 
 调用接口的时候，会触发这个方法，返回一个Promise对象；
 
-- ### validate
+### validate
 
 调用接口的时候，会触发这个方法，返回一个Promise；
 
@@ -269,6 +274,34 @@ export class WxAppEngine extends BaseEngine {
 ## 7. compose类
 
 拷贝于koa的compose类；
+
+### use
+
+添加一个中间件函数
+
+```js
+    engine.use(async(ctx,next)=>{
+        // do something
+
+        await next();
+    })
+```
+
+### clear
+
+清除掉所有的中间件方法
+
+### compose
+
+生成执行方法,返回一个方法：(context: T, next: MiddleFunc) => Promise
+
+### callback
+
+执行compose生成的方法，返回一个方法：() => Promise
+
+### errorHandle
+
+错误处理方法
 
 ## 8. DEMO
 
