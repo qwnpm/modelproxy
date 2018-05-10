@@ -26,8 +26,7 @@ export class ModelProxy extends Compose<any> {
     public addEngines(engines: { [id: string]: IEngine; }): ModelProxy {
         for (let key in engines) {
             if (engines.hasOwnProperty(key)) {
-                let element = engines[key];
-                engineFactory.add(key, element, true);
+                engineFactory.add(key, engines[key], true);
             }
         }
 
@@ -53,8 +52,8 @@ export class ModelProxy extends Compose<any> {
      * @returns {Promise<any>}
      */
     public async execute(ns: string, key: string, options: IExecute = {}) {
-        let interfaces = this.getNs(ns);
-        let instance = interfaces.get(key);
+        const interfaces = this.getNs(ns),
+            instance = interfaces.get(key);
 
         if (!instance) {
             throw new ModelProxyMissingError(`没有发现/${ns}/${key}的接口方法！`);
@@ -76,8 +75,11 @@ export class ModelProxy extends Compose<any> {
     public async executeAll(inters: { [key: string]: () => Promise<any> }): Promise<any> {
         const maps: Promise<any>[] = [];
 
-        if (!inters) {
-            return null;
+        // 如果没有配置inters，则直接返回null
+        if (!inters || !Object.keys(inters).length) {
+            return new Promise((resolve: (val: any | PromiseLike<any>) => void) => {
+                resolve(null);
+            });
         }
 
         Object.keys(inters).forEach((key: string) => {
@@ -97,7 +99,7 @@ export class ModelProxy extends Compose<any> {
 
     /**
      * race 比赛，快的先返回
-     * @param inters 接口们
+     * @param   {Array<NormalExecuteInfo | Promise<any>>}  inters 接口们
      * @returns {Promise<any>}
      */
     public async race(inters: Array<NormalExecuteInfo | Promise<any>>): Promise<any> {
