@@ -305,9 +305,10 @@ export class WxAppEngine extends BaseEngine {
 
 ## 8. DEMO
 
-```typescript
-import { ModelProxy } from "./";
+可以贴到runkit中执行
 
+```typescript
+let ModelProxy = require("modelproxy").ModelProxy;
 let proxy = new ModelProxy();
 
 proxy.loadConfig({

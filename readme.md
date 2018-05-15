@@ -1,6 +1,5 @@
 # ModelProxy [![Build Status](https://travis-ci.org/nick121212/modelproxy.svg?branch=master)](https://travis-ci.org/nick121212/modelproxy)
 
-
 轻量级的接口配置工具。适用于前端以及nodejs端。
 
 ## [modelproxy](./packages/modelproxy/README.md)
