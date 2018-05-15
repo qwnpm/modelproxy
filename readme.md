@@ -1,4 +1,4 @@
-# ModelProxy
+# ModelProxy [![Build Status](https://travis-ci.org/nick121212/fx-schema-form.svg?branch=master)](https://travis-ci.org/nick121212/fx-schema-form)
 
 轻量级的接口配置工具。适用于前端以及nodejs端。
 

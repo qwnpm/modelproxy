@@ -4,7 +4,7 @@
   "description": "modelproxy中fetch的engine",
   "main": "out/fetch.engine.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "exit 0;"
   },
   "typings": "./out/fetch.engine.d.ts",
   "types": "./out/fetch.engine.d.ts",
