@@ -59,19 +59,16 @@ class FetchEngine extends modelproxy_1.BaseEngine {
     }
     /**
      * 调用接口代理方法
-     * @param instance 接口的信息
-     * @param options  调用接口的参数
+     * @param   {IInterfaceModel} instance 接口的信息
+     * @param   {IExecute}        options  调用接口的参数
+     * @returns {Promise<any>}             返回数据
      */
     proxy(instance, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const fn = this.callback(() => {
-                // console.log();
-            });
-            const ctx = {
+            const ctx = yield this.callback()({
                 executeInfo: options,
                 instance: instance,
-            };
-            yield fn(ctx);
+            });
             if (ctx.isError) {
                 throw ctx.err;
             }
