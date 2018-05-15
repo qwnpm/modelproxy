@@ -1,5 +1,4 @@
 var path = require("path");
-var bluebird = require("bluebird");
 var expect = require("chai").expect;
 var assert = require("chai").assert;
 var modelProxy = require("../out/index");
@@ -35,7 +34,6 @@ describe('modelproxy interface', function () {
     var data = { "username": "nick", "password": "111111" };
 
     before(function () {
-        global.Promise = bluebird;
         proxy = new modelProxy.ModelProxy();
         proxy.loadConfig(config);
     });

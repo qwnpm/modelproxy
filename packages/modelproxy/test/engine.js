@@ -1,10 +1,7 @@
 var path = require("path");
-var bluebird = require("bluebird");
 var expect = require("chai").expect;
 var assert = require("chai").assert;
 var modelProxy = require("../out/index");
-
-global.Promise = bluebird;
 
 var config = {
     "key": "test",
