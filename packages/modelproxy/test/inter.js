@@ -26,10 +26,16 @@ var config = {
         "config": {
             "test": "test-1"
         }
+    }, {
+        "key": "users",
+        "title": "用户列表",
+        "method": "GET",
+        "path": "/users",
+        "engine": "default"
     }]
 };
 
-describe('modelproxy interface', function () {
+describe("modelproxy interface", function () {
     var proxy;
     var data = { "username": "nick", "password": "111111" };
 
@@ -39,7 +45,21 @@ describe('modelproxy interface', function () {
     });
 
     describe("测试接口", function () {
-        it('测试文章接口', function (done) {
+
+        it("测试无限极rest", function (done) {
+            let users = proxy.getNs("test").get("users");
+            let articles = proxy.getNs("test").get("article");
+
+            if (users && articles) {
+                users.get(2,{
+                    instance:{
+                        path:"/uu"
+                    }
+                }).then(done.bind(null, null), done.bind(null, null));
+            }
+        });
+
+        it("测试文章接口", function (done) {
             var article = proxy.getNs("test").get("article");
             let path = article.getPath();
 
@@ -54,7 +74,7 @@ describe('modelproxy interface', function () {
                 expect(articles).to.be.a("object");
                 expect(articles.constructor).to.be.equal({}.constructor);
 
-                return article.post({ data: { title: '测试文章标题', content: '测试文章内容' } });
+                return article.post({ data: { title: "测试文章标题", content: "测试文章内容" } });
             }).then(function (art) {
                 expect(art.method).to.equal("POST");
             }).then(done.bind(null, null));

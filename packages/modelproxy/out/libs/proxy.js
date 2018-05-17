@@ -20,8 +20,7 @@ class ModelProxy extends compose_1.Compose {
     addEngines(engines) {
         for (let key in engines) {
             if (engines.hasOwnProperty(key)) {
-                let element = engines[key];
-                engine_factory_1.engineFactory.add(key, element, true);
+                engine_factory_1.engineFactory.add(key, engines[key], true);
             }
         }
         return this;
@@ -32,8 +31,7 @@ class ModelProxy extends compose_1.Compose {
     }
     execute(ns, key, options = {}) {
         return __awaiter(this, void 0, void 0, function* () {
-            let interfaces = this.getNs(ns);
-            let instance = interfaces.get(key);
+            const interfaces = this.getNs(ns), instance = interfaces.get(key);
             if (!instance) {
                 throw new errors_1.ModelProxyMissingError(`没有发现/${ns}/${key}的接口方法！`);
             }
@@ -43,8 +41,10 @@ class ModelProxy extends compose_1.Compose {
     executeAll(inters) {
         return __awaiter(this, void 0, void 0, function* () {
             const maps = [];
-            if (!inters) {
-                return null;
+            if (!inters || !Object.keys(inters).length) {
+                return new Promise((resolve) => {
+                    resolve(null);
+                });
             }
             Object.keys(inters).forEach((key) => {
                 maps.push(inters[key]().then((data) => {

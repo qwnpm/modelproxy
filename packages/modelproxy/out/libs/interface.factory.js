@@ -22,6 +22,7 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
             getPath: this.getPath.bind(this, instance),
             post: this.custom.bind(this, instance, "POST", null),
             put: this.custom.bind(this, instance, "PUT"),
+            replacePath: this.replacePath.bind(this, instance),
         });
     }
     execute(instance, options) {
@@ -42,11 +43,11 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
     }
     custom(instance, type, id, options = {}) {
         return __awaiter(this, void 0, void 0, function* () {
-            let { instance: extraInstance = {}, params = {} } = options;
+            let { instance: extraInstance = {}, params = {} } = options, iiinstance;
             extraInstance.method = type;
             if (id) {
-                extraInstance.path = instance.path + "/:id";
-                params.id = id;
+                extraInstance.path = (extraInstance.path || instance.path) + "/:__id__";
+                params.__id__ = id;
             }
             options.instance = extraInstance;
             options.params = params;
@@ -57,8 +58,7 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
         return Object.assign({}, instance, extendInstance);
     }
     getPath(instance, extendInstance = {}) {
-        let engine;
-        let iinstance;
+        let engine, iinstance;
         iinstance = this.megreInstance(instance, extendInstance);
         engine = engine_factory_1.engineFactory.use("default");
         return engine.getStatePath(iinstance) + iinstance.path;
@@ -69,6 +69,12 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
         iinstance = this.megreInstance(instance, options.instance);
         engine = engine_factory_1.engineFactory.use("default");
         return engine.getFullPath(iinstance, options);
+    }
+    replacePath(instance, options = {}) {
+        let engine, iinstance;
+        iinstance = this.megreInstance(instance, options.instance);
+        engine = engine_factory_1.engineFactory.use("default");
+        return engine.replacePath(iinstance, options);
     }
 }
 exports.InterfaceFactory = InterfaceFactory;

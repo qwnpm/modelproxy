@@ -9,4 +9,5 @@ export declare class InterfaceFactory extends BaseFactory<IInterfaceModel> {
     private megreInstance(instance, extendInstance?);
     private getPath(instance, extendInstance?);
     private getFullPath(instance, options?);
+    private replacePath(instance, options?);
 }
