@@ -63,7 +63,7 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
         engine = engine_factory_1.engineFactory.use("default");
         methodFunc = engine[method];
         if (methodFunc) {
-            return methodFunc(instance, extendInstance);
+            return methodFunc(iinstance, extendInstance);
         }
         return "";
     }
@@ -76,7 +76,10 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
         return this.executeEngineMethod(instance, options.instance, "getFullPath");
     }
     replacePath(instance, options = {}) {
-        return this.executeEngineMethod(instance, options.instance, "replacePath");
+        let engine, iinstance;
+        iinstance = this.megreInstance(instance, options.instance);
+        engine = engine_factory_1.engineFactory.use("default");
+        return engine.replacePath(iinstance, options);
     }
 }
 exports.InterfaceFactory = InterfaceFactory;

@@ -106,7 +106,7 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
         methodFunc = (engine as any)[method];
 
         if (methodFunc) {
-            return methodFunc(instance, extendInstance);
+            return methodFunc(iinstance, extendInstance);
         }
 
         return "";
@@ -150,14 +150,13 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
     * @returns {string}
     */
     private replacePath(instance: IInterfaceModel, options: IExecute = {}) {
-        // let engine: IEngine,
-        //     iinstance: IInterfaceModel;
+        let engine: IEngine,
+            iinstance: IInterfaceModel;
 
-        // iinstance = this.megreInstance(instance, options.instance);
+        iinstance = this.megreInstance(instance, options.instance);
 
-        // engine = engineFactory.use("default");
+        engine = engineFactory.use("default");
 
-        return this.executeEngineMethod(instance, options.instance, "replacePath");
-        // return engine.replacePath(iinstance, options);
+        return engine.replacePath(iinstance, options);
     }
 }

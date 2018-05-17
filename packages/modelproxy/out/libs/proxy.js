@@ -85,6 +85,40 @@ class ModelProxy extends compose_1.Compose {
         }
         return this.interfaces[ns];
     }
+    minix(ns, ...keys) {
+        if (!keys.length) {
+            throw new errors_1.ModelProxyMissingError(`必须制定至少一个Key！`);
+        }
+        const interfaces = this.getNs(ns), idKeys = [], lastKey = keys.pop(), lastInterface = interfaces.get(lastKey);
+        if (!lastInterface) {
+            return null;
+        }
+        keys.forEach((k) => {
+            let instance = interfaces.get(k);
+            if (!instance) {
+                throw new errors_1.ModelProxyMissingError(`${k}不存在于空间${ns}！`);
+            }
+            idKeys.push(instance);
+        });
+        return (...ids) => {
+            if (ids.length !== idKeys.length) {
+                throw new Error(`传入的参数个数不正确！`);
+            }
+            let paths = [];
+            idKeys.forEach((k, idx) => {
+                paths.push(k.replacePath({
+                    instance: {
+                        path: k.path + "/:" + k.key
+                    },
+                    params: {
+                        [k.key]: ids[idx]
+                    }
+                }));
+            });
+            lastInterface.path = paths.concat([lastInterface.path]).join("");
+            return lastInterface;
+        };
+    }
     initInterfaces(config, overrideInterfaceConfig = {}) {
         let ifFactory = new interface_factory_1.InterfaceFactory();
         config.interfaces.forEach((i) => {
