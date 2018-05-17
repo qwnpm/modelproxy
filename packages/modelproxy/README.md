@@ -432,6 +432,8 @@ if (login && article) {
 
 ## 9. ChangeList
 
+- 1.0.14
+  - 添加了minix方法，修复了一些bug;
 - 1.0.11
   - 为compose类添加结束标志位;
 - 1.0.10
