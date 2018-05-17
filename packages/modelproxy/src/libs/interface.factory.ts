@@ -26,7 +26,8 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
             getPath: this.getPath.bind(this, instance),
             post: this.custom.bind(this, instance, "POST", null),
             put: this.custom.bind(this, instance, "PUT"),
-            replacePath: this.replacePath.bind(this, instance),
+            replacePath: this.replacePath.bind(this, instance)
+            // minix: this.minix.bind(this, instance)
             // patch: this.custom.bind(this, instance, "GET"),
         });
     }
@@ -86,6 +87,13 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
         return Object.assign({}, instance, extendInstance);
     }
 
+    /**
+     * 自行engine下的方法
+     * @param   {IInterfaceModel}       instance       实例名称
+     * @param   {IInterfaceModelCommon} extendInstance 需要合并的实例
+     * @param   {string}                method         具体的方法
+     * @returns {string}
+     */
     private executeEngineMethod(instance: IInterfaceModel, extendInstance: IInterfaceModelCommon = {}, method: string) {
         let engine: IEngine,
             methodFunc: any,

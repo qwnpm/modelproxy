@@ -66,7 +66,7 @@ export class ModelProxy extends Compose<any> {
      * 执行多个接口请求
      * @param   {{ [key: string]: () => Promise<any> }} inters 接口以key:value的形式
      * @returns {Promise<any>}
-     * @example 
+     * @example
      *  proxy.executeAll({
      *      a: proxy.execute.bind(proxy, nsA, keyA, {}),
      *      b: proxy.execute.bind(proxy, nsB, keyB, {})

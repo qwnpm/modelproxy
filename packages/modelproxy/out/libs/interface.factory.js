@@ -22,7 +22,7 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
             getPath: this.getPath.bind(this, instance),
             post: this.custom.bind(this, instance, "POST", null),
             put: this.custom.bind(this, instance, "PUT"),
-            replacePath: this.replacePath.bind(this, instance),
+            replacePath: this.replacePath.bind(this, instance)
         });
     }
     execute(instance, options) {
