@@ -85,6 +85,25 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
     private megreInstance(instance: IInterfaceModel, extendInstance: IInterfaceModelCommon = {}): IInterfaceModel {
         return Object.assign({}, instance, extendInstance);
     }
+
+    private executeEngineMethod(instance: IInterfaceModel, extendInstance: IInterfaceModelCommon = {}, method: string) {
+        let engine: IEngine,
+            methodFunc: any,
+            iinstance: IInterfaceModel;
+
+        iinstance = this.megreInstance(instance, extendInstance);
+
+        engine = engineFactory.use("default");
+
+        methodFunc = (engine as any)[method];
+
+        if (methodFunc) {
+            return methodFunc(instance, extendInstance);
+        }
+
+        return "";
+    }
+
     /**
      * 获取接口的路径
      * @param  {IInterfaceModel}       instance       实例名称
@@ -97,9 +116,7 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
 
         iinstance = this.megreInstance(instance, extendInstance);
 
-        engine = engineFactory.use("default");
-
-        return engine.getStatePath(iinstance) + iinstance.path;
+        return this.executeEngineMethod(instance, extendInstance, "getStatePath") + iinstance.path;
     }
     /**
      * 获取接口的路径
@@ -108,14 +125,15 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
      * @returns {string}
      */
     private getFullPath(instance: IInterfaceModel, options: IExecute = {}): string {
-        let engine: IEngine;
-        let iinstance: IInterfaceModel;
+        // let engine: IEngine;
+        // let iinstance: IInterfaceModel;
 
-        iinstance = this.megreInstance(instance, options.instance);
+        // iinstance = this.megreInstance(instance, options.instance);
 
-        engine = engineFactory.use("default");
+        // engine = engineFactory.use("default");
 
-        return engine.getFullPath(iinstance, options);
+        return this.executeEngineMethod(instance, options.instance, "getFullPath");
+        // return engine.getFullPath(iinstance, options);
     }
     /**
     * 替换接口的路径
@@ -124,13 +142,14 @@ export class InterfaceFactory extends BaseFactory<IInterfaceModel> {
     * @returns {string}
     */
     private replacePath(instance: IInterfaceModel, options: IExecute = {}) {
-        let engine: IEngine,
-            iinstance: IInterfaceModel;
+        // let engine: IEngine,
+        //     iinstance: IInterfaceModel;
 
-        iinstance = this.megreInstance(instance, options.instance);
+        // iinstance = this.megreInstance(instance, options.instance);
 
-        engine = engineFactory.use("default");
+        // engine = engineFactory.use("default");
 
-        return engine.replacePath(iinstance, options);
+        return this.executeEngineMethod(instance, options.instance, "replacePath");
+        // return engine.replacePath(iinstance, options);
     }
 }

@@ -57,24 +57,26 @@ class InterfaceFactory extends base_factory_1.BaseFactory {
     megreInstance(instance, extendInstance = {}) {
         return Object.assign({}, instance, extendInstance);
     }
+    executeEngineMethod(instance, extendInstance = {}, method) {
+        let engine, methodFunc, iinstance;
+        iinstance = this.megreInstance(instance, extendInstance);
+        engine = engine_factory_1.engineFactory.use("default");
+        methodFunc = engine[method];
+        if (methodFunc) {
+            return methodFunc(instance, extendInstance);
+        }
+        return "";
+    }
     getPath(instance, extendInstance = {}) {
         let engine, iinstance;
         iinstance = this.megreInstance(instance, extendInstance);
-        engine = engine_factory_1.engineFactory.use("default");
-        return engine.getStatePath(iinstance) + iinstance.path;
+        return this.executeEngineMethod(instance, extendInstance, "getStatePath") + iinstance.path;
     }
     getFullPath(instance, options = {}) {
-        let engine;
-        let iinstance;
-        iinstance = this.megreInstance(instance, options.instance);
-        engine = engine_factory_1.engineFactory.use("default");
-        return engine.getFullPath(iinstance, options);
+        return this.executeEngineMethod(instance, options.instance, "getFullPath");
     }
     replacePath(instance, options = {}) {
-        let engine, iinstance;
-        iinstance = this.megreInstance(instance, options.instance);
-        engine = engine_factory_1.engineFactory.use("default");
-        return engine.replacePath(iinstance, options);
+        return this.executeEngineMethod(instance, options.instance, "replacePath");
     }
 }
 exports.InterfaceFactory = InterfaceFactory;
