@@ -21,6 +21,7 @@
   - [executeAll](#executeAll)
   - [race](#race)
   - [getNs](#getNs)
+  - [minix](#minix)
 - [Engines](#Engines)
   - [proxy](#proxy)
   - [validate](#validate)
@@ -198,6 +199,44 @@ export class WxAppEngine extends BaseEngine {
 
 ```typescript
     proxy.getNs("test");
+```
+
+### minix
+
+合并多个接口，生成rest风格的接口。返回一个方法。
+
+```typescript
+    const modelproxy = require("./");
+    const proxy = new modelproxy.ModelProxy();
+
+    proxy.loadConfig({
+        "key": "test",
+        "engine": "default",
+        "states": {
+            "dev": "http://www.baidu.com"
+        },
+        "state": "dev",
+        "interfaces": [{
+            "key": "articles",
+            "title": "文章接口",
+            "method": "GET",
+            "path": "/articles"
+        }, {
+            "key": "users",
+            "title": "用户列表",
+            "method": "GET",
+            "path": "/users",
+            "engine": "default"
+        }]
+    }, {});
+
+    const userArticles = proxy.minix("test", "users", "articles")(1);
+    const users = proxy.minix("test", "users")();
+
+    console.log(userArticles.path); // /users/1/articles
+
+    userArticles.get(5); // GET /users/1/articles/5
+    users.get(); // GET /users
 ```
 
 ## 5. InterfaceFactory
@@ -393,6 +432,8 @@ if (login && article) {
 
 ## 9. ChangeList
 
+- 1.0.14
+  - 添加了minix方法，修复了一些bug;
 - 1.0.11
   - 为compose类添加结束标志位;
 - 1.0.10

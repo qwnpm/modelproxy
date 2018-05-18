@@ -20,8 +20,7 @@ class ModelProxy extends compose_1.Compose {
     addEngines(engines) {
         for (let key in engines) {
             if (engines.hasOwnProperty(key)) {
-                let element = engines[key];
-                engine_factory_1.engineFactory.add(key, element, true);
+                engine_factory_1.engineFactory.add(key, engines[key], true);
             }
         }
         return this;
@@ -32,8 +31,7 @@ class ModelProxy extends compose_1.Compose {
     }
     execute(ns, key, options = {}) {
         return __awaiter(this, void 0, void 0, function* () {
-            let interfaces = this.getNs(ns);
-            let instance = interfaces.get(key);
+            const interfaces = this.getNs(ns), instance = interfaces.get(key);
             if (!instance) {
                 throw new errors_1.ModelProxyMissingError(`没有发现/${ns}/${key}的接口方法！`);
             }
@@ -43,8 +41,10 @@ class ModelProxy extends compose_1.Compose {
     executeAll(inters) {
         return __awaiter(this, void 0, void 0, function* () {
             const maps = [];
-            if (!inters) {
-                return null;
+            if (!inters || !Object.keys(inters).length) {
+                return new Promise((resolve) => {
+                    resolve(null);
+                });
             }
             Object.keys(inters).forEach((key) => {
                 maps.push(inters[key]().then((data) => {
@@ -84,6 +84,40 @@ class ModelProxy extends compose_1.Compose {
             throw new errors_1.ModelProxyMissingError(`没有找到${ns}空间;当前命名空间【${nses.join(",")}】`);
         }
         return this.interfaces[ns];
+    }
+    minix(ns, ...keys) {
+        if (!keys.length) {
+            throw new errors_1.ModelProxyMissingError(`必须制定至少一个Key！`);
+        }
+        const interfaces = this.getNs(ns), idKeys = [], lastKey = keys.pop(), lastInterface = interfaces.get(lastKey);
+        if (!lastInterface) {
+            return null;
+        }
+        keys.forEach((k) => {
+            let instance = interfaces.get(k);
+            if (!instance) {
+                throw new errors_1.ModelProxyMissingError(`${k}不存在于空间${ns}！`);
+            }
+            idKeys.push(instance);
+        });
+        return (...ids) => {
+            if (ids.length !== idKeys.length) {
+                throw new Error(`传入的参数个数不正确！`);
+            }
+            let paths = [];
+            idKeys.forEach((k, idx) => {
+                paths.push(k.replacePath({
+                    instance: {
+                        path: k.path + "/:" + k.key
+                    },
+                    params: {
+                        [k.key]: ids[idx]
+                    }
+                }));
+            });
+            lastInterface.path = paths.concat([lastInterface.path]).join("");
+            return lastInterface;
+        };
     }
     initInterfaces(config, overrideInterfaceConfig = {}) {
         let ifFactory = new interface_factory_1.InterfaceFactory();

@@ -6,7 +6,7 @@ import { ModelProxyMissingError } from "./errors";
 export class BaseFactory<T> {
     protected instances: { [id: string]: T; } = {};
 
-    /** 
+    /**
      * 添加一个实例
      * @param   {string}  name         实例的名称
      * @param   {T}       intance      实例
@@ -23,7 +23,7 @@ export class BaseFactory<T> {
     /**
      * 获取一个实例
      * @param   {string} name 实例标志
-     * @returns {T|null} 
+     * @returns {T|null} 实例
      */
     public get(name: string): T | null {
         if (this.instances.hasOwnProperty(name)) {

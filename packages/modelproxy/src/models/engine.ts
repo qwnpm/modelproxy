@@ -6,4 +6,5 @@ export interface IEngine {
     proxy(intance: IInterfaceModel, options: IExecute): Promise<any>;
     getStatePath(instance: IInterfaceModel): string;
     getFullPath(instance: IInterfaceModel, options: IExecute): string;
+    replacePath(instance: IInterfaceModel, options: IExecute): string;
 }

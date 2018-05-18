@@ -11,6 +11,7 @@ export interface IInterfaceModel extends IInterfaceModelCommon {
     execute(options: IExecute): Promise<any>;
     getPath(extendInterface?: IInterfaceModelCommon): string;
     getFullPath(options?: IExecute): string;
+    replacePath(options?: IExecute): string;
     get(id?: string | number | null, options?: IExecute): Promise<any>;
     post(options?: IExecute): Promise<any>;
     delete(id?: string | number | null, options?: IExecute): Promise<any>;

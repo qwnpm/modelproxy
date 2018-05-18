@@ -1,6 +1,6 @@
 import { IExecute } from "../models/execute";
 import { IEngine } from "../models/engine";
-import { IInterfaceModelCommon } from "../models/interface";
+import { IInterfaceModel, IInterfaceModelCommon } from "../models/interface";
 import { IProxyConfig } from "../models/proxy.config";
 import { InterfaceFactory } from "./interface.factory";
 import { Compose } from "./compose";
@@ -21,5 +21,6 @@ export declare class ModelProxy extends Compose<any> {
     }): Promise<any>;
     race(inters: Array<NormalExecuteInfo | Promise<any>>): Promise<any>;
     getNs(ns: string): InterfaceFactory;
+    minix(ns: string, ...keys: string[]): ((...ids: any[]) => IInterfaceModel) | null;
     private initInterfaces(config, overrideInterfaceConfig?);
 }

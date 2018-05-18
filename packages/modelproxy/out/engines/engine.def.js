@@ -13,6 +13,7 @@ class DefaultEngine extends engine_base_1.BaseEngine {
     constructor() {
         super();
         this.use((ctx, next) => __awaiter(this, void 0, void 0, function* () {
+            console.log(ctx.instance.title, ctx.instance.method, this.getFullPath(ctx.instance, ctx.executeInfo));
             yield next("");
         }));
     }

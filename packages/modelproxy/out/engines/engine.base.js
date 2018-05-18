@@ -42,7 +42,8 @@ class BaseEngine extends compose_1.Compose {
             }
             else {
                 if (!params[name] && !data[name]) {
-                    throw new errors_1.ModelProxyMissingError(`缺少[${name}]字段！`);
+                    console.log(name, params, data);
+                    throw new errors_1.ModelProxyMissingError(`缺少${name}字段！`);
                 }
                 paths.push(`/${params[name] || data[name]}`);
                 delete params[name];

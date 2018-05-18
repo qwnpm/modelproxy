@@ -66,7 +66,7 @@ export class ModelProxy extends Compose<any> {
      * 执行多个接口请求
      * @param   {{ [key: string]: () => Promise<any> }} inters 接口以key:value的形式
      * @returns {Promise<any>}
-     * @example 
+     * @example
      *  proxy.executeAll({
      *      a: proxy.execute.bind(proxy, nsA, keyA, {}),
      *      b: proxy.execute.bind(proxy, nsB, keyB, {})
@@ -135,6 +135,62 @@ export class ModelProxy extends Compose<any> {
         }
 
         return this.interfaces[ns];
+    }
+
+    /**
+     * 生成N级的rest风格接口
+     * @param   {string}   ns    命名空间
+     * @param   {string[]} keys  需要合并的接口的key
+     * @returns {(...ids: any[]) : IInterfaceModel}
+     * @example
+     *     proxy.minix("test","users","articles")(1000).get(10) => GET /users/1000/articles/10
+     */
+    public minix(ns: string, ...keys: string[]): ((...ids: any[]) => IInterfaceModel) | null {
+        if (!keys.length) {
+            throw new ModelProxyMissingError(`必须制定至少一个Key！`);
+        }
+
+        const interfaces = this.getNs(ns),
+            idKeys: IInterfaceModel[] = [],
+            lastKey: string = keys.pop() as string,
+            lastInterface = interfaces.get(lastKey);
+
+        if (!lastInterface) {
+            return null;
+        }
+
+        keys.forEach((k: string) => {
+            let instance = interfaces.get(k);
+
+            if (!instance) {
+                throw new ModelProxyMissingError(`${k}不存在于空间${ns}！`);
+            }
+
+            idKeys.push(instance);
+        });
+
+        return (...ids: any[]) => {
+            if (ids.length !== idKeys.length) {
+                throw new Error(`传入的参数个数不正确！`);
+            }
+
+            let paths: string[] = [];
+
+            idKeys.forEach((k: IInterfaceModel, idx: number) => {
+                paths.push(k.replacePath({
+                    instance: {
+                        path: k.path + "/:" + k.key
+                    },
+                    params: {
+                        [k.key as string]: ids[idx]
+                    }
+                }));
+            });
+
+            lastInterface.path = paths.concat([lastInterface.path as string]).join("");
+
+            return lastInterface;
+        };
     }
 
     /**
